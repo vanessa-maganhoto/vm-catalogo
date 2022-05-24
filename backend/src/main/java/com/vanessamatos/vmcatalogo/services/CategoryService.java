@@ -5,6 +5,8 @@ import com.vanessamatos.vmcatalogo.entities.Category;
 import com.vanessamatos.vmcatalogo.repositories.CategoryRepository;
 import com.vanessamatos.vmcatalogo.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,16 @@ public class CategoryService {
         } catch (EntityNotFoundException e){
             throw  new ResourceNotFoundException("Id não existe " + id);
         }
+    }
 
+    public void delete(Long id){
+        try{
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e){
+            throw  new ResourceNotFoundException("Id não encontrado " + id);
+        }
+        catch (DataIntegrityViolationException e){
+            throw  new DataIntegrityViolationException("Violação de integridade");
+        }
     }
 }
