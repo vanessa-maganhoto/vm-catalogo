@@ -15,8 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.hibernate.Session;
+import org.hibernate.Filter;
+
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 
 @Service
 public class ProductService {
@@ -33,6 +39,11 @@ public class ProductService {
         return list.map(x -> new ProductDTO(x));
     }
 
+
+//    public List<ProductDTO> findAll(){
+//        List<Product> list = productRepository.findAll();
+//        return list.stream().map(x -> new ProductDTO(x)).collect(Collectors.toList());
+//    }
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
         Optional<Product> productObj = productRepository.findById(id);
