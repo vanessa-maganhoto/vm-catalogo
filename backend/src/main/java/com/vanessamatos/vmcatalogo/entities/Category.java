@@ -6,7 +6,10 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_category")
 @SQLDelete(sql = "UPDATE tb_category SET deleted=true, deleted_at=now() WHERE id=?")
@@ -29,6 +32,9 @@ public class Category implements Serializable {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant deletedAt;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products = new HashSet<>();
     public Category(){}
 
     public Category(Long id, String name) {
@@ -78,6 +84,10 @@ public class Category implements Serializable {
     @PreUpdate
     public void preUpdate(){
         updatedAt = Instant.now();
+    }
+
+    public Set<Product> getProducts() {
+        return products;
     }
 
     @Override
