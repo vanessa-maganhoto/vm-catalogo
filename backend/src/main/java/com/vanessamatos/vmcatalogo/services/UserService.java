@@ -1,9 +1,6 @@
 package com.vanessamatos.vmcatalogo.services;
 
-import com.vanessamatos.vmcatalogo.dto.CategoryDTO;
-import com.vanessamatos.vmcatalogo.dto.RoleDTO;
-import com.vanessamatos.vmcatalogo.dto.UserDTO;
-import com.vanessamatos.vmcatalogo.dto.UserInsertDTO;
+import com.vanessamatos.vmcatalogo.dto.*;
 import com.vanessamatos.vmcatalogo.entities.Category;
 import com.vanessamatos.vmcatalogo.entities.Role;
 import com.vanessamatos.vmcatalogo.entities.User;
@@ -65,10 +62,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO userDTO){
+    public UserDTO update(Long id, UserUpdateDTO dto){
         try{
             User newUser = userRepository.getById(id);
-            copyDtoToNewUser(userDTO, newUser);
+            copyDtoToNewUser(dto, newUser);
             newUser = userRepository.save(newUser);
             return new UserDTO(newUser);
         } catch (EntityNotFoundException e){

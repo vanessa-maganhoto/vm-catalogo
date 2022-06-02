@@ -2,6 +2,7 @@ package com.vanessamatos.vmcatalogo.resources;
 
 import com.vanessamatos.vmcatalogo.dto.UserDTO;
 import com.vanessamatos.vmcatalogo.dto.UserInsertDTO;
+import com.vanessamatos.vmcatalogo.dto.UserUpdateDTO;
 import com.vanessamatos.vmcatalogo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,9 +51,9 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO){
-        userDTO = userService.update(id, userDTO);
-        return ResponseEntity.ok().body(userDTO);
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto){
+        UserDTO newDto = userService.update(id, dto);
+        return ResponseEntity.ok().body(newDto);
     }
 
     @DeleteMapping(value = "/{id}")
