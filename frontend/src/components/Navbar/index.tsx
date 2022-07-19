@@ -1,7 +1,7 @@
 import './styles.css';
-import 'bootstrap/js/src/collapse.js'
+import 'bootstrap/js/src/collapse.js';
 
-function Navbar() {
+const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary main-nav">
       <div className="container-fluid">
