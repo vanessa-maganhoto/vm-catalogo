@@ -17,7 +17,7 @@ function Home() {
           </div>
           <div>
             <Link to="/products">
-              <ButtonIcon />
+              <ButtonIcon text="Inicie agora a sua busca"/>
             </Link>
           </div>
         </div>
