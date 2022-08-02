@@ -1,6 +1,6 @@
 package com.vanessamatos.vmcatalogo.resources.exceptions;
 
-import com.vanessamatos.vmcatalogo.services.exceptions.DataBaseException;
+import com.vanessamatos.vmcatalogo.services.exceptions.DatabaseException;
 import com.vanessamatos.vmcatalogo.services.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +27,8 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(DataBaseException.class)
-    public ResponseEntity<StandardError> entityNotFound(DataBaseException e, HttpServletRequest request){
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> entityNotFound(DatabaseException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());

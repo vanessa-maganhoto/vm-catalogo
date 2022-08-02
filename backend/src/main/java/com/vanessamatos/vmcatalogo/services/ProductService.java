@@ -6,6 +6,7 @@ import com.vanessamatos.vmcatalogo.entities.Category;
 import com.vanessamatos.vmcatalogo.entities.Product;
 import com.vanessamatos.vmcatalogo.repositories.CategoryRepository;
 import com.vanessamatos.vmcatalogo.repositories.ProductRepository;
+import com.vanessamatos.vmcatalogo.services.exceptions.DatabaseException;
 import com.vanessamatos.vmcatalogo.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,8 +39,9 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(Long categoryId, String name, Pageable pageable ){
         List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getById(categoryId));
-        Page<Product> list = productRepository.find(categories, name, pageable);
-        return list.map(x -> new ProductDTO(x));
+        Page<Product> productPage = productRepository.find(categories, name, pageable);
+        productRepository.findProductsWithCategories(productPage.getContent());
+        return productPage.map(x -> new ProductDTO(x, x.getCategories()));
     }
 
 
@@ -75,14 +77,15 @@ public class ProductService {
         }
     }
 
-    public void delete(Long id){
-        try{
+    public void delete(Long id) {
+        try {
             productRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
-            throw  new ResourceNotFoundException("Id não encontrado " + id);
         }
-        catch (DataIntegrityViolationException e){
-            throw  new DataIntegrityViolationException("Violação de integridade");
+        catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Id não encontrado " + id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Violação de integridade");
         }
     }
 
