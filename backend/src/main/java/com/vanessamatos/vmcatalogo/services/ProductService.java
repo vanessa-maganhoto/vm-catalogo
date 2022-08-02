@@ -20,6 +20,7 @@ import org.hibernate.Session;
 import org.hibernate.Filter;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,8 +36,9 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAllPaged(Pageable pageable){
-        Page<Product> list = productRepository.findAll(pageable);
+    public Page<ProductDTO> findAllPaged(Long categoryId, String name, Pageable pageable ){
+        List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getById(categoryId));
+        Page<Product> list = productRepository.find(categories, name, pageable);
         return list.map(x -> new ProductDTO(x));
     }
 

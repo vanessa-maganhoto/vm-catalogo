@@ -13,8 +13,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_product")
-@SQLDelete(sql = "UPDATE tb_product SET deleted=true, deleted_at=now() WHERE id=?")
-@Where(clause = "deleted=false")
+//@SQLDelete(sql = "UPDATE tb_product SET deleted=true, deleted_at=now() WHERE id=?")
+//@Where(clause = "deleted=false")
 public class Product implements Serializable {
     private static final long serialVersionUID= 1L;
     @Id
@@ -28,16 +28,16 @@ public class Product implements Serializable {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant date;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant createdAt;
-
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant updatedAt;
-    @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;
-
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant deletedAt;
+//    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+//    private Instant createdAt;
+//
+//    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+//    private Instant updatedAt;
+//    @Column(name = "deleted")
+//    private boolean deleted = Boolean.FALSE;
+//
+//    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+//    private Instant deletedAt;
     @ManyToMany
     @JoinTable(
             name = "tb_product_category",
@@ -58,16 +58,16 @@ public class Product implements Serializable {
     }
 
 
-    @PrePersist
-    public void prePersist(){
-        createdAt = Instant.now();
-        deleted = false;
-    }
-
-    @PreUpdate
-    public void preUpdate(){
-        updatedAt = Instant.now();
-    }
+//    @PrePersist
+//    public void prePersist(){
+//        createdAt = Instant.now();
+//        deleted = false;
+//    }
+//
+//    @PreUpdate
+//    public void preUpdate(){
+//        updatedAt = Instant.now();
+//    }
 
     public Long getId() {
         return id;
@@ -121,29 +121,29 @@ public class Product implements Serializable {
         return categories;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public Instant getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(Instant deletedAt) {
-        this.deletedAt = deletedAt;
-    }
+//    public Instant getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public Instant getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public boolean isDeleted() {
+//        return deleted;
+//    }
+//
+//    public void setDeleted(boolean deleted) {
+//        this.deleted = deleted;
+//    }
+//
+//    public Instant getDeletedAt() {
+//        return deletedAt;
+//    }
+//
+//    public void setDeletedAt(Instant deletedAt) {
+//        this.deletedAt = deletedAt;
+//    }
 
     @Override
     public boolean equals(Object o) {

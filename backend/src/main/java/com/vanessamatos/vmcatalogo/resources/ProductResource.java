@@ -28,9 +28,13 @@ public class ProductResource {
 
     @GetMapping
     //@Query("SELECT p FROM tb_products p WHERE deleted=false")
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
+    public ResponseEntity<Page<ProductDTO>> findAll(
+
+            @RequestParam(value = "categoryId", defaultValue = "0") Long categoryId,
+            @RequestParam(value = "name", defaultValue = "") String name,
+            Pageable pageable){
         //Parâmetros: page, size, sort
-        Page<ProductDTO> list = productService.findAllPaged(pageable);
+        Page<ProductDTO> list = productService.findAllPaged(categoryId, name.trim(), pageable );
         return ResponseEntity.ok().body(list);
     }
 //    @GetMapping
