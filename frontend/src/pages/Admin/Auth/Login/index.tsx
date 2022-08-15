@@ -13,7 +13,7 @@ const Login = () => {
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = (formData: FormData) =>{
-    console.log("alo")
+    console.log(formData)
   }
   return (
     <div className="base-card login-card">
