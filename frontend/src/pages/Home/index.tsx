@@ -2,10 +2,12 @@ import './styles.css';
 import { ReactComponent as MainImage } from 'assets/images/main-image.svg';
 import ButtonIcon from 'components/ButtonIcon';
 import { Link } from 'react-router-dom';
+import { isAuthenticated } from 'util/requests';
 
 function Home() {
   return (
     <div className="home-container">
+      <h1>{isAuthenticated() ? 'autenticado' : 'Não'}</h1>
       <div className="base-card home-card">
         <div className="home-content-container">
           <div>
