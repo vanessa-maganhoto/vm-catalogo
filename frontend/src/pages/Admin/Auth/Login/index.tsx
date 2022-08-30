@@ -16,7 +16,7 @@ type FormData = {
 
 type LocationState = {
   from: string;
-}
+};
 
 const Login = () => {
 
