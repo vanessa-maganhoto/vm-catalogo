@@ -1,45 +1,49 @@
-import ProductCrudCard from "pages/Admin/Products/ProductCrudCard";
-import { Link } from "react-router-dom";
+import { AxiosRequestConfig } from 'axios';
+import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Product } from 'types/product';
+import { SpringPage } from 'types/vendor/spring';
+import { requestBackend } from 'util/requests';
 
 import './styles.css';
 
 const List = () => {
+  const [page, setPage] = useState<SpringPage<Product>>();
 
-    const product = {
-        "id": 1,
-        "name": "The Lord of the Rings",
-        "description": "The Lord of the Rings",
-        "price": 90.5,
-        "imgUrl": "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg",
-        "date": "2020-07-13T20:50:07.123450Z",
-        "categories": [
-            {
-                "id": 2,
-                "name": "Eletrônicos"
-            }
-        ]
-    }
-    return (
-        <div className="product-crud-container">
-        <div className="product-crud-bar-container">
-            <Link to="/admin/products/create">
-                <button className="btn btn-primary text-white btn-crud-add">ADICIONAR</button>
-            </Link>
-            <div className="base-card product-filter-container">Serach bar</div>
+  useEffect(() => {
+    const config: AxiosRequestConfig = {
+      method: 'GET',
+      url: '/products',
+      params: {
+        page: 0,
+        size: 12,
+      },
+    };
 
-        </div>
-            <div className="row">
-                <div className="col-sm-6 col-md-12">
-                    <ProductCrudCard product={product}/>
-                </div>
-                <div className="col-sm-6 col-md-12">
-                    <ProductCrudCard product={product}/>
-                </div>
-                <div className="col-sm-6 col-md-12">
-                    <ProductCrudCard product={product}/>
-                </div>
-            </div>
-        </div>
-    )
-}    
+    requestBackend(config).then((response) => {
+      setPage(response.data);
+    });
+  }, []);
+
+  return (
+    <div className="product-crud-container">
+      <div className="product-crud-bar-container">
+        <Link to="/admin/products/create">
+          <button className="btn btn-primary text-white btn-crud-add">
+            ADICIONAR
+          </button>
+        </Link>
+        <div className="base-card product-filter-container">Serach bar</div>
+      </div>
+      <div className="row">
+        {page?.content.map((product) => (
+          <div key={product.id} className="col-sm-6 col-md-12">
+            <ProductCrudCard product={product} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 export default List;
