@@ -21,7 +21,7 @@ const List = () => {
       url: '/products',
       params: {
         page: 0,
-        size: 12,
+        size: 50,
       },
     };
 
@@ -38,7 +38,7 @@ const List = () => {
             ADICIONAR
           </button>
         </Link>
-        <div className="base-card product-filter-container">Serach bar</div>
+        <div className="base-card product-filter-container">Search bar</div>
       </div>
       <div className="row">
         {page?.content.map((product) => (
