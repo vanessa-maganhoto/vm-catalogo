@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
+import CurrencyInput from 'react-currency-input-field';
 import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import Select from 'react-select';
@@ -10,10 +11,9 @@ import './styles.css';
 
 type UrlParams = {
   productId: string;
-}
+};
 
 const Form = () => {
-
   const { productId } = useParams<UrlParams>();
 
   const isEditing = productId !== 'create';
@@ -27,52 +27,51 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    control
+    control,
   } = useForm<Product>();
 
-  useEffect(()=>{
-    requestBackend({url: '/categories'})
-    .then(response => {
-      setSelectCategories(response.data.content)
-    })
+  useEffect(() => {
+    requestBackend({ url: '/categories' }).then((response) => {
+      setSelectCategories(response.data.content);
+    });
   }, []);
 
   useEffect(() => {
     if (isEditing) {
-      requestBackend({ url: `/products/${productId}`})
-        .then((response) => {
+      requestBackend({ url: `/products/${productId}` }).then((response) => {
+        const product = response.data as Product;
 
-          const product = response.data as Product;
-
-          setValue('name', product.name);
-          setValue('price', product.price);
-          setValue('description', product.description);
-          setValue('imgUrl', product.imgUrl);
-          setValue('categories', product.categories);
-          console.log( product.description);
-
-        });
+        setValue('name', product.name);
+        setValue('price', product.price);
+        setValue('description', product.description);
+        setValue('imgUrl', product.imgUrl);
+        setValue('categories', product.categories);
+        console.log(product.description);
+      });
     }
   }, [isEditing, productId, setValue]);
 
   const onSubmit = (formData: Product) => {
-
+    const data = {
+      ...formData,
+      price: String(formData.price).replace(',', '.'),
+    };
 
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
-      data:formData,
+      data,
       withCredentials: true,
     };
 
     requestBackend(config).then(() => {
-      history.push("/admin/products");
+      history.push('/admin/products');
     });
   };
 
-  const handleCancel = () =>{
-    history.push("/admin/products");
-  }
+  const handleCancel = () => {
+    history.push('/admin/products');
+  };
 
   return (
     <div className="product-crud-container">
@@ -100,40 +99,46 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
-
-                  <Controller
-                    name= "categories"
-                    rules={{required: true}}
-                    control={control}
-                    render={({field}) => (
-
-                      <Select {...field}
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
                       options={selectCategories}
                       classNamePrefix="product-crud-select"
                       isMulti
                       getOptionLabel={(category: Category) => category.name}
-                      getOptionValue={(category: Category) => String(category.id)}
-                      />
-                      )}
-                  />
-                  {errors.categories && (
-                    <div className="invalid-feedback d-block">
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                    />
+                  )}
+                />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
                     Campo obrigatório
                   </div>
-                  )}
+                )}
               </div>
 
               <div className="margin-bottom-30">
-                <input
-                  {...register('price', {
-                    required: 'Campo obrigatório',
-                  })}
-                  type="text"
-                  className={`form-control base-input ${
-                    errors.name ? 'is-invalid' : ''
-                  }`}
-                  placeholder="Preço"
+                <Controller
                   name="price"
+                  rules={{ required: 'Campo obrigatório' }}
+                  control={control}
+                  render={({ field }) => (
+                    <CurrencyInput
+                      placeholder="Preço"
+                      className={`form-control base-input ${
+                        errors.name ? 'is-invalid' : ''
+                      }`}
+                      disableGroupSeparators={true}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
+                  )}
                 />
                 <div className="invalid-feedback d-block">
                   {errors.price?.message}
@@ -160,7 +165,6 @@ const Form = () => {
                   {errors.imgUrl?.message}
                 </div>
               </div>
-              
             </div>
 
             <div className="col-lg-6">
@@ -170,27 +174,24 @@ const Form = () => {
                   {...register('description', {
                     required: 'Campo obrigatório',
                   })}
-                  
                   className={`form-control base-input h-auto ${
-                    errors.name ? 'is-invalid' : ''
+                    errors.description ? 'is-invalid' : ''
                   }`}
                   placeholder="Descrição"
                   name="description"
-                /> 
+                />
                 <div className="invalid-feedback d-block">
                   {errors.description?.message}
                 </div>
-                
               </div>
             </div>
           </div>
 
           <div className="product-crud-buttons-container">
-            <button 
-            className="btn btn-outline-danger product-crud-button"
-            onClick={handleCancel}
+            <button
+              className="btn btn-outline-danger product-crud-button"
+              onClick={handleCancel}
             >
-           
               CANCELAR
             </button>
             <button className="btn btn-primary product-crud-button text-white">
