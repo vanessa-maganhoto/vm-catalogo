@@ -78,4 +78,16 @@ export const server = setupServer(
         ctx.json(productResponse)
     );
   }),
+  rest.put(`${BASE_URL}/products/:productId`, (req, res, ctx) => {
+    return res(
+        ctx.status(200), 
+        ctx.json(productResponse)
+    );
+  }),
+  rest.get(`${BASE_URL}/products/:productId`, (req, res, ctx) => {
+    return res(
+        ctx.status(200), 
+        ctx.json(productResponse)
+    );
+  }),
 );
